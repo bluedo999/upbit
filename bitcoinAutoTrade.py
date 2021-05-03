@@ -1,9 +1,18 @@
 import time
 import pyupbit
 import datetime
+import requests
 
 access = "EL13IF46ku47ex7AxnynmmxHu31Pawiz20CIj7eu"
 secret = "zuuaqx3R3PNn6KpJd3UIQSgpivA2kxX1Jurw6xIJ"
+myToken = "xoxb-2015723902582-2009813660199-vB3IuINgQDiRMZSzz4nORgof"
+
+def post_message(token, channel, text):
+   """슬랙 메시지 전송"""
+   response = requests.post("https://slack.com/api/chat.postMessage",
+       headers={"Authorization": "Bearer "+token},
+       data={"channel": channel,"text": text}
+   )
 
 def get_target_price(ticker, k):
     """변동성 돌파 전략으로 매수 목표가 조회"""
@@ -34,6 +43,8 @@ def get_current_price(ticker):
 # 로그인
 upbit = pyupbit.Upbit(access, secret)
 print("autotrade start")
+# 시작 메세지 슬랙 전송
+post_message(myToken,"#upbit", "autotrade start")
 
 # 자동매매 시작
 while True:
@@ -49,11 +60,14 @@ while True:
                 krw = get_balance("KRW")
                 if krw > 5000:
                     upbit.buy_market_order("KRW-MFT", krw*0.9995)
+                    post_message(myToken,"#upbit", "MFT buy : " +str(buy_result))
         else:
             btc = get_balance("MFT")
             if btc > 0.00008:
                 upbit.sell_market_order("KRW-MFT", btc*0.9995)
+                post_message(myToken,"#upbit", "MFT buy : " +str(sell_result))
         time.sleep(1)
     except Exception as e:
         print(e)
+        post_message(myToken,"#upbit", e)
         time.sleep(1)
