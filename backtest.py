@@ -2,7 +2,7 @@ import pyupbit
 import numpy as np
 
 # OHLCV(open, high, low, close, volume)로 당일 시가, 고가, 저가, 종가, 거래량에 대한 데이터
-df = pyupbit.get_ohlcv("KRW-MFT", count=9)
+df = pyupbit.get_ohlcv("KRW-DOGE", count=9)
 
 # 변동폭 * k 계산, (고가 - 저가) * k값
 df['range'] = (df['high'] - df['low']) * 0.5
