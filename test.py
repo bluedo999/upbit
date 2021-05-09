@@ -6,3 +6,4 @@ upbit = pyupbit.Upbit(access, secret)
 
 print(upbit.get_balance("KRW-DOGE"))     # KRW-BTC 조회
 print(upbit.get_balance("KRW"))         # 보유 현금 
+
